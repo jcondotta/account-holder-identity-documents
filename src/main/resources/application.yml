@@ -1,0 +1,18 @@
+micronaut:
+  banner: true
+  application:
+    name: account-holder-identity-documents
+  server:
+    port: 8074
+    multipart:
+      max-file-size: 20971520 # 20 * 1024 * 1024 = 20MB
+
+  object-storage:
+    aws:
+      account-holder-identity-document:
+        bucket: 'jcondotta-localstack-account-holder-identity-document'
+
+aws:
+  access-key-id: ${AWS_ACCESS_KEY_ID}
+  secret-key: ${AWS_SECRET_ACCESS_KEY}
+  region: ${AWS_DEFAULT_REGION}
