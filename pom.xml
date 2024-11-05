@@ -30,6 +30,10 @@
         <junit-platform-suite.version>1.8.1</junit-platform-suite.version>
         <mockito.version>5.12.0</mockito.version>
         <micronaut-test.version>4.5.0</micronaut-test.version>
+        <testcontainers.version>1.19.8</testcontainers.version>
+
+
+        <micronaut-maven-plugin.version>4.6.1</micronaut-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -106,6 +110,24 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>io.micronaut.test</groupId>
+            <artifactId>micronaut-test-rest-assured</artifactId>
+            <version>${micronaut-test.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>localstack</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>8.0.1.Final</version>
@@ -118,6 +140,7 @@
             <plugin>
                 <groupId>io.micronaut.maven</groupId>
                 <artifactId>micronaut-maven-plugin</artifactId>
+                <version>${micronaut-maven-plugin.version}</version>
                 <configuration>
                     <configFile>aot-${packaging}.properties</configFile>
                 </configuration>

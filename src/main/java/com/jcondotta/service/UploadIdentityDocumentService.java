@@ -6,6 +6,7 @@ import io.micronaut.objectstorage.aws.AwsS3Operations;
 import io.micronaut.objectstorage.request.UploadRequest;
 import io.micronaut.objectstorage.response.UploadResponse;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
@@ -23,7 +24,7 @@ public class UploadIdentityDocumentService {
     private final Validator validator;
 
     @Inject
-    public UploadIdentityDocumentService(AwsS3Operations awsS3Operations, Validator validator) {
+    public UploadIdentityDocumentService(@Named("account-holder-identity-document") AwsS3Operations awsS3Operations, Validator validator) {
         this.awsS3Operations = awsS3Operations;
         this.validator = validator;
     }
@@ -41,25 +42,9 @@ public class UploadIdentityDocumentService {
         }
 
         var storageKey = uploadIdentityDocumentRequest.storageKey();
-
         var uploadRequest = UploadRequest.fromCompletedFileUpload(uploadIdentityDocumentRequest.fileUpload(), storageKey);
-//        var uploadResponse = awsS3Operations.upload(uploadRequest);
-        var uploadResponse = new UploadResponse<PutObjectResponse>() {
-            @Override
-            public @NonNull String getKey() {
-                return "asdasdas";
-            }
 
-            @Override
-            public @NonNull String getETag() {
-                return "asdasdasd";
-            }
-
-            @Override
-            public @NonNull PutObjectResponse getNativeResponse() {
-                return null;
-            }
-        };
+        var uploadResponse = awsS3Operations.upload(uploadRequest);
 
         LOGGER.info("[AccountHolderId={}] Identity document uploaded successfully with S3 key: {}", accountHolderId, storageKey);
 
