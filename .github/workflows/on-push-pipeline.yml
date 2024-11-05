@@ -41,7 +41,7 @@ jobs:
 
       - name: Build Native Image
         run: |
-          mvn clean package -Pnative -Dpackaging=native-image --batch-mode
+          mvn clean package -Pnative -Dpackaging=native-image -DskipTests=true --batch-mode
 
       - name: Upload Unit Test Coverage Report
         uses: actions/upload-artifact@v3
