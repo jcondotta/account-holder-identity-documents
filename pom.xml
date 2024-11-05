@@ -15,18 +15,20 @@
     </parent>
 
     <properties>
+        <micronaut.version>4.6.0</micronaut.version>
         <exec.mainClass>com.jcondotta.Application</exec.mainClass>
         <packaging>jar</packaging>
         <skipUnitTests>false</skipUnitTests>
 
-
-        <micronaut-object-storage-aws.version>2.6.0</micronaut-object-storage-aws.version>
-        <!--    <jdk.version>17</jdk.version>-->
-        <!--    <release.version>17</release.version>-->
-            <micronaut.version>4.6.0</micronaut.version>
+        <jdk.version>17</jdk.version>
+        <release.version>${jdk.version}</release.version>
+        <maven.compiler.source>${jdk.version}</maven.compiler.source>
+        <maven.compiler.target>${jdk.version}</maven.compiler.target>
         <!--    <micronaut.aot.enabled>false</micronaut.aot.enabled>-->
 <!--            <micronaut.aot.packageName>com.jcondotta.aot.generated</micronaut.aot.packageName>-->
         <!--    <micronaut.runtime>netty</micronaut.runtime>-->
+
+        <micronaut-object-storage-aws.version>2.6.0</micronaut-object-storage-aws.version>
 
         <junit-jupiter.version>5.10.2</junit-jupiter.version>
         <junit-platform-suite.version>1.8.1</junit-platform-suite.version>
@@ -34,8 +36,10 @@
         <micronaut-test.version>4.5.0</micronaut-test.version>
         <testcontainers.version>1.19.8</testcontainers.version>
 
-
+        <maven-surefire-plugin.version>3.4.0</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.4.0</maven-failsafe-plugin.version>
         <micronaut-maven-plugin.version>4.6.1</micronaut-maven-plugin.version>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
     </properties>
 
     <dependencies>
@@ -120,20 +124,20 @@
             <artifactId>micronaut-test-rest-assured</artifactId>
             <version>${micronaut-test.version}</version>
             <scope>test</scope>
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.apache.groovy</groupId>-->
-<!--                    <artifactId>groovy</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.apache.groovy</groupId>-->
-<!--                    <artifactId>groovy-json</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.apache.groovy</groupId>-->
-<!--                    <artifactId>groovy-xml</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.groovy</groupId>
+                    <artifactId>groovy</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.groovy</groupId>
+                    <artifactId>groovy-json</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.groovy</groupId>
+                    <artifactId>groovy-xml</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -169,7 +173,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-<!--                <version>${maven-surefire-plugin.version}</version>-->
+                <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <skipTests>${skipUnitTests}</skipTests>
                 </configuration>
@@ -178,7 +182,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-<!--                <version>${maven-failsafe-plugin.version}</version>-->
+                <version>${maven-failsafe-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>integration-test</id>
@@ -306,50 +310,59 @@
                 </executions>
             </plugin>
 
-<!--            <plugin>-->
-<!--                <groupId>org.graalvm.buildtools</groupId>-->
-<!--                <artifactId>native-maven-plugin</artifactId>-->
-<!--                <version>0.10.3</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>build</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <version>0.10.3</version>
+                <executions>
+                    <execution>
+                        <id>build-native</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <configuration>
+                            <classpathScope>compile</classpathScope> <!-- Excludes test classes -->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-compiler-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    &lt;!&ndash; Uncomment to enable incremental compilation &ndash;&gt;-->
-<!--                    &lt;!&ndash; <useIncrementalCompilation>false</useIncrementalCompilation> &ndash;&gt;-->
-
-<!--                    <annotationProcessorPaths combine.children="append">-->
-<!--                        <path>-->
-<!--                            <groupId>io.micronaut</groupId>-->
-<!--                            <artifactId>micronaut-http-validation</artifactId>-->
-<!--                            <version>${micronaut.core.version}</version>-->
-<!--                        </path>-->
-<!--                        <path>-->
-<!--                            <groupId>io.micronaut.serde</groupId>-->
-<!--                            <artifactId>micronaut-serde-processor</artifactId>-->
-<!--                            <version>${micronaut.serialization.version}</version>-->
-<!--                            <exclusions>-->
-<!--                                <exclusion>-->
-<!--                                    <groupId>io.micronaut</groupId>-->
-<!--                                    <artifactId>micronaut-inject</artifactId>-->
-<!--                                </exclusion>-->
-<!--                            </exclusions>-->
-<!--                        </path>-->
-<!--                    </annotationProcessorPaths>-->
-<!--                    <compilerArgs>-->
-<!--                        <arg>-Amicronaut.processing.group=com.jcondotta</arg>-->
-<!--                        <arg>-Amicronaut.processing.module=account-holder-identity-documents</arg>-->
-<!--                    </compilerArgs>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <annotationProcessorPaths combine.children="append">
+                        <path>
+                            <groupId>io.micronaut</groupId>
+                            <artifactId>micronaut-http-validation</artifactId>
+                            <version>${micronaut.core.version}</version>
+                        </path>
+                        <path>
+                            <groupId>io.micronaut</groupId>
+                            <artifactId>micronaut-graal</artifactId>
+                            <version>${micronaut.version}</version>
+                        </path>
+                        <path>
+                            <groupId>io.micronaut.serde</groupId>
+                            <artifactId>micronaut-serde-processor</artifactId>
+                            <version>${micronaut.serialization.version}</version>
+                            <exclusions>
+                                <exclusion>
+                                    <groupId>io.micronaut</groupId>
+                                    <artifactId>micronaut-inject</artifactId>
+                                </exclusion>
+                            </exclusions>
+                        </path>
+                    </annotationProcessorPaths>
+                    <compilerArgs>
+                        <arg>-Amicronaut.processing.group=com.jcondotta</arg>
+                        <arg>-Amicronaut.processing.module=account-holder-identity-documents</arg>
+                        <arg>-Xlint:all</arg>
+                        <arg>-verbose</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
