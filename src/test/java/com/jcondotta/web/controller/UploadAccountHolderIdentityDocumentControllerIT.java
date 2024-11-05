@@ -2,8 +2,10 @@ package com.jcondotta.web.controller;
 
 
 import com.jcondotta.argument_provider.SupportedMediaTypesArgumentProvider;
+import com.jcondotta.argument_provider.UnsupportedMediaTypesArgumentProvider;
 import com.jcondotta.container.LocalStackTestContainer;
 import com.jcondotta.helper.TestAccountHolder;
+import com.jcondotta.service.request.UploadIdentityDocumentRequest;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.objectstorage.aws.AwsS3Operations;
@@ -14,6 +16,7 @@ import io.restassured.specification.RequestSpecification;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -80,86 +83,30 @@ class UploadAccountHolderIdentityDocumentControllerIT implements LocalStackTestC
 
         assertThat(awsS3Operations.exists(storageKey)).isTrue();
     }
-//
-//    @ParameterizedTest
-//    @ArgumentsSource(FileUnsupportedMediaTypesArgumentProvider.class)
-//    public void shouldNotUploadIdentityDocument_whenMediaTypeIsUnsupported(String supportedMediaTypeFilename) {
-//        File file = createTempFile(supportedMediaTypeFilename);
-//
-//        given()
-//            .spec(requestSpecification)
-//                .pathParam("account-holder-id", ACCOUNT_HOLDER_ID_JEFFERSON)
-//                .multiPart("fileUpload", file)
-//        .when()
-//            .post()
-//        .then()
-//            .statusCode(HttpStatus.BAD_REQUEST.getCode()); //TODO mudar pra Unsupported media type
-//
-////        assertThat(awsS3Operations.exists(storageKey)).isFalse();
-//    }
-//
-//    @ParameterizedTest
-//    @ArgumentsSource(FileUnsupportedMediaTypesArgumentProvider.class)
-//    public void shouldNotUploadIdentityDocument_whenFileExceeds20MbSize(String supportedMediaTypeFilename) {
-//
-//
-//    }
-//
-//    @ParameterizedTest
-//    @ValueSource(strings = { MediaType.IMAGE_PNG, MediaType.IMAGE_JPEG })
-//    void givenSupportedMediaTypeFiles_whenUploadAccountHolderIdentityDocument_thenUploadFile(MediaType supportedMediaType) throws IOException {
-//        File file = createTempFile(supportedMediaType);
-//
-//        given()
-//            .spec(requestSpecification)
-//                .multiPart("fileUpload", file)
-//                .pathParam("account-holder-id", accountHolderId)
-//        .when()
-//            .post()
-//        .then()
-//            .statusCode(HttpStatus.CREATED.getCode())
-//                .header("location", equalTo("/api/v1/account-holders/account-holder-id/6635471134/upload-identity-document"))
-//                .header("ETag", notNullValue());
-//
-//        var expectedS3ObjectKey = S3ObjectKeyBuilder.build(accountHolderId, file.getName());
-//        Assertions.assertThat(awsS3Operations.exists(expectedS3ObjectKey)).isTrue();
-//
-//        await().pollDelay(100, TimeUnit.MILLISECONDS).untilAsserted(() -> {
-//            var receiveMessageResponse = sqsClient.receiveMessage(builder -> builder.queueUrl(accountHolderIdentityDocumentQueueURL).build());
-//            assertThat(receiveMessageResponse.messages().size()).isEqualTo(1);
-//
-//            var message = receiveMessageResponse.messages().get(0);
-//            var uploadedIdentityDocumentMessage = jsonMapper.readValue(message.body(), UploadedIdentityDocumentMessage.class);
-//
-//            assertThat(uploadedIdentityDocumentMessage.accountHolderId()).isEqualTo(accountHolderId);
-//            assertThat(uploadedIdentityDocumentMessage.accountHolderIdDocumentKey()).isEqualTo(expectedS3ObjectKey);
-//        });
-//    }
-//
-//    @ParameterizedTest
-//    @ValueSource(strings = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_PDF, MediaType.IMAGE_GIF, MediaType.TEXT_PLAIN })
-//    void givenUnsupportedMediaTypeFiles_whenUploadAccountHolderIdentityDocument_thenReturnBadRequest(MediaType unsupportedMediaType) throws IOException {
-//        File file = createTempFile(unsupportedMediaType);
-//
-//        given()
-//            .spec(requestSpecification)
-//                .multiPart("fileUpload", file)
-//                .pathParam("account-holder-id", accountHolderId)
-//        .when()
-//            .post()
-//        .then()
-//            .statusCode(HttpStatus.BAD_REQUEST.getCode())
-//            .rootPath("_embedded")
-//                .body("errors", hasSize(1))
-//                .body("errors[0].message", equalTo("Only .png and .jpeg files are accepted"));
-//
-//
-//        var nonExistentS3ObjectKey = S3ObjectKeyBuilder.build(accountHolderId, file.getName());
-//        Assertions.assertThat(awsS3Operations.exists(nonExistentS3ObjectKey)).isFalse();
-//
-//        await().pollDelay(100, TimeUnit.MILLISECONDS).untilAsserted(() -> {
-//            var receiveMessageResponse = sqsClient.receiveMessage(builder -> builder.queueUrl(accountHolderIdentityDocumentQueueURL).build());
-//            assertThat(receiveMessageResponse.messages().size()).isEqualTo(0);
-//        });
-//    }
+
+    @ParameterizedTest
+    @ArgumentsSource(UnsupportedMediaTypesArgumentProvider.class)
+    public void shouldReturnStatus415UnsupportedMediaType_whenMediaTypeIsUnsupported(MediaType unsupportedMediaType) {
+        File file = createTempFile(unsupportedMediaType);
+
+        given()
+            .spec(requestSpecification)
+                .pathParam("account-holder-id", ACCOUNT_HOLDER_ID_JEFFERSON)
+                .multiPart("fileUpload", file)
+        .when()
+            .post()
+        .then()
+            .statusCode(HttpStatus.BAD_REQUEST.getCode());
+    }
+
+    @Test
+    void shouldReturnStatus400BadRequest_whenFileUploadIdIsNull() {
+        given()
+            .spec(requestSpecification)
+                .pathParam("account-holder-id", ACCOUNT_HOLDER_ID_JEFFERSON)
+        .when()
+            .post()
+        .then()
+            .statusCode(HttpStatus.BAD_REQUEST.getCode());
+    }
 }

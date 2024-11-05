@@ -1,5 +1,7 @@
 package com.jcondotta.service.request;
 
+import com.jcondotta.annotation.ValidatedFileExtensions;
+import com.jcondotta.service.UploadIdentityDocumentService;
 import io.micronaut.http.multipart.CompletedFileUpload;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +14,7 @@ public record UploadIdentityDocumentRequest(
         UUID accountHolderId,
 
         @NotNull(message = "accountHolder.fileUpload.notNull")
+        @ValidatedFileExtensions
         CompletedFileUpload fileUpload)
 {
         public String storageKey() {

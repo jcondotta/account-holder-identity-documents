@@ -7,6 +7,7 @@ import io.micronaut.http.annotation.*;
 import io.micronaut.http.multipart.CompletedFileUpload;
 import io.micronaut.objectstorage.response.UploadResponse;
 import io.micronaut.validation.Validated;
+import jakarta.inject.Inject;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ public class UploadAccountHolderIdentityDocumentController {
 
     private final UploadIdentityDocumentService uploadIdDocumentService;
 
+    @Inject
     public UploadAccountHolderIdentityDocumentController(UploadIdentityDocumentService uploadIdDocumentService){
         this.uploadIdDocumentService = uploadIdDocumentService;
     }
@@ -32,11 +34,11 @@ public class UploadAccountHolderIdentityDocumentController {
         LOGGER.info("[AccountHolderId={}] Received request to upload identity document.", accountHolderId);
 
         var uploadIdentityDocumentRequest = new UploadIdentityDocumentRequest(accountHolderId, fileUpload);
-        UploadResponse<PutObjectResponse> response = uploadIdDocumentService.upload(uploadIdentityDocumentRequest);
+        var uploadResponse = uploadIdDocumentService.upload(uploadIdentityDocumentRequest);
 
         return HttpResponse
-                .created(response.getKey())
-                .header(HttpHeaders.ETAG, response.getETag());
+                .created(uploadResponse.getKey())
+                .header(HttpHeaders.ETAG, uploadResponse.getETag());
 
     }
 }

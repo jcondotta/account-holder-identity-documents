@@ -17,6 +17,8 @@
     <properties>
         <exec.mainClass>com.jcondotta.Application</exec.mainClass>
         <packaging>jar</packaging>
+        <skipUnitTests>false</skipUnitTests>
+
 
         <micronaut-object-storage-aws.version>2.6.0</micronaut-object-storage-aws.version>
         <!--    <jdk.version>17</jdk.version>-->
@@ -62,7 +64,11 @@
             <artifactId>micronaut-validation</artifactId>
             <version>4.7.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>io.micronaut.objectstorage</groupId>
+            <artifactId>micronaut-object-storage-aws</artifactId>
+            <version>${micronaut-object-storage-aws.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
@@ -74,9 +80,9 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>io.micronaut.objectstorage</groupId>
-            <artifactId>micronaut-object-storage-aws</artifactId>
-            <version>${micronaut-object-storage-aws.version}</version>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.14.0</version>
         </dependency>
 
         <!-- Test dependencies -->
@@ -145,22 +151,147 @@
                     <configFile>aot-${packaging}.properties</configFile>
                 </configuration>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>com.diffplug.spotless</groupId>-->
-<!--                <artifactId>spotless-maven-plugin</artifactId>-->
-<!--                <version>2.41.1</version>-->
-<!--                <configuration>-->
-<!--                    <java>-->
-<!--                        <licenseHeader>-->
-<!--                            <file>${project.basedir}/LICENSEHEADER</file>-->
-<!--                        </licenseHeader>-->
-<!--                    </java>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-enforcer-plugin</artifactId>-->
-<!--            </plugin>-->
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+<!--                <version>${maven-surefire-plugin.version}</version>-->
+                <configuration>
+                    <skipTests>${skipUnitTests}</skipTests>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+<!--                <version>${maven-failsafe-plugin.version}</version>-->
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>no-duplicate-declared-dependencies</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <banDuplicatePomDependencyVersions/>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.12</version>
+                <executions>
+                    <!-- Unit Test Coverage -->
+                    <execution>
+                        <id>prepare-agent-unit-tests</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.build.directory}/jacoco-unit-tests.exec</destFile>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>report-unit-tests</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/jacoco-unit-tests.exec</dataFile>
+                            <outputDirectory>${project.build.directory}/site/jacoco-unit-tests</outputDirectory>
+                        </configuration>
+                    </execution>
+
+                    <!-- Integration Test Coverage -->
+                    <execution>
+                        <id>prepare-agent-integration-tests</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.build.directory}/jacoco-integration-tests.exec</destFile>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>report-integration-tests</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/jacoco-integration-tests.exec</dataFile>
+                            <outputDirectory>${project.build.directory}/site/jacoco-integration-tests</outputDirectory>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>post-integration-merge</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>merge</goal>
+                        </goals>
+                        <configuration>
+                            <fileSets>
+                                <fileSet>
+                                    <directory>${project.build.directory}</directory>
+                                    <includes>
+                                        <include>jacoco*.exec</include>
+                                    </includes>
+                                </fileSet>
+                            </fileSets>
+                            <destFile>${project.build.directory}/jacoco-aggregate.exec</destFile>
+                        </configuration>
+                    </execution>
+
+                    <!-- Generate Final Report for SonarCloud -->
+                    <execution>
+                        <id>generate-merged-report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/jacoco-aggregate.exec</dataFile>
+                            <outputDirectory>${project.build.directory}/site/jacoco</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
 <!--            <plugin>-->
 <!--                <groupId>org.apache.maven.plugins</groupId>-->
 <!--                <artifactId>maven-compiler-plugin</artifactId>-->
