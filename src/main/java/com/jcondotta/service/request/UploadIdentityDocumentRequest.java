@@ -9,17 +9,18 @@ import java.util.UUID;
 
 @Serdeable
 public record UploadIdentityDocumentRequest(
+
         @NotNull(message = "accountHolder.accountHolderId.notNull")
         UUID accountHolderId,
 
         @NotNull(message = "accountHolder.fileUpload.notNull")
-        @ValidatedFileExtensions
+        @ValidatedFileExtensions(message = "accountHolder.fileUpload.unsupportedFileExtension")
         CompletedFileUpload fileUpload)
 {
         public String storageKey() {
                 return accountHolderId.toString()
                         .concat(fileUpload.getContentType()
                                 .map(contentType -> "." + contentType.getExtension())
-                                .orElseThrow((IllegalStateException::new)));
+                                .orElseThrow(() -> new IllegalStateException("accountHolder.fileUpload.contentType.notNull")));
         }
 }

@@ -4,6 +4,7 @@ import com.jcondotta.argument_provider.SupportedMediaTypesArgumentProvider;
 import com.jcondotta.argument_provider.UnsupportedMediaTypesArgumentProvider;
 import com.jcondotta.factory.ValidatorTestFactory;
 import com.jcondotta.helper.TestAccountHolder;
+import com.jcondotta.helper.TestFilenameBuilder;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.multipart.CompletedFileUpload;
 import jakarta.validation.Validator;
@@ -33,7 +34,8 @@ class UploadIdentityDocumentRequestTest {
     @ParameterizedTest
     @ArgumentsSource(SupportedMediaTypesArgumentProvider.class)
     void shouldNotDetectConstraintViolation_whenMediaTypeIsSupported(MediaType supportedMediaType) {
-        when(fileUpload.getFilename()).thenReturn("something.".concat(supportedMediaType.getExtension()));
+        var filename = TestFilenameBuilder.build(supportedMediaType);
+        when(fileUpload.getFilename()).thenReturn(filename);
 
         var uploadIdentityDocumentRequest = new UploadIdentityDocumentRequest(ACCOUNT_HOLDER_ID_JEFFERSON, fileUpload);
         var constraintViolations = VALIDATOR.validate(uploadIdentityDocumentRequest);
@@ -43,7 +45,8 @@ class UploadIdentityDocumentRequestTest {
     @ParameterizedTest
     @ArgumentsSource(UnsupportedMediaTypesArgumentProvider.class)
     void shouldDetectConstraintViolation_whenMediaTypeIsUnsupported(MediaType unsupportedMediaType) {
-        when(fileUpload.getFilename()).thenReturn("something.".concat(unsupportedMediaType.getExtension()));
+        var filename = TestFilenameBuilder.build(unsupportedMediaType);
+        when(fileUpload.getFilename()).thenReturn(filename);
 
         var uploadIdentityDocumentRequest = new UploadIdentityDocumentRequest(ACCOUNT_HOLDER_ID_JEFFERSON, fileUpload);
         var constraintViolations = VALIDATOR.validate(uploadIdentityDocumentRequest);
@@ -56,9 +59,12 @@ class UploadIdentityDocumentRequestTest {
                 });
     }
 
-    @Test
-    void shouldDetectConstraintViolation_whenAccountHolderIdIsNull() {
-        when(fileUpload.getFilename()).thenReturn("something.".concat(MediaType.IMAGE_PNG_TYPE.getExtension()));
+    @ParameterizedTest
+    @ArgumentsSource(SupportedMediaTypesArgumentProvider.class)
+    void shouldDetectConstraintViolation_whenAccountHolderIdIsNull(MediaType supportedMediaType) {
+        var filename = TestFilenameBuilder.build(supportedMediaType);
+        when(fileUpload.getFilename()).thenReturn(filename);
+
         var uploadIdentityDocumentRequest = new UploadIdentityDocumentRequest(null, fileUpload);
 
         var constraintViolations = VALIDATOR.validate(uploadIdentityDocumentRequest);
@@ -115,12 +121,13 @@ class UploadIdentityDocumentRequestTest {
     }
 
     @Test
-    void shouldReturnObjectStorageKey_whenContentTypeIsAbsent() {
+    void shouldReturnObjectStorageKey_whenContentTypeIsMissing() {
         when(fileUpload.getContentType()).thenReturn(Optional.empty());
 
         var uploadIdentityDocumentRequest = new UploadIdentityDocumentRequest(ACCOUNT_HOLDER_ID_JEFFERSON, fileUpload);
 
         assertThatThrownBy(() -> uploadIdentityDocumentRequest.storageKey())
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("accountHolder.fileUpload.contentType.notNull");
     }
 }

@@ -5,6 +5,7 @@ import com.jcondotta.argument_provider.SupportedMediaTypesArgumentProvider;
 import com.jcondotta.argument_provider.UnsupportedMediaTypesArgumentProvider;
 import com.jcondotta.container.LocalStackTestContainer;
 import com.jcondotta.helper.TestAccountHolder;
+import com.jcondotta.helper.TestTempFileCreator;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.objectstorage.aws.AwsS3Operations;
@@ -21,9 +22,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
@@ -54,20 +52,10 @@ class UploadAccountHolderIdentityDocumentControllerIT implements LocalStackTestC
                 .basePath(AccountHolderURIBuilder.IDENTITY_DOCUMENT_API_V1_MAPPING);
     }
 
-    public File createTempFile(MediaType mediaType)  {
-        Path path;
-        try {
-            path = Files.createTempFile("test-file-", ".".concat(mediaType.getExtension()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return path.toFile();
-    }
-
     @ParameterizedTest
     @ArgumentsSource(SupportedMediaTypesArgumentProvider.class)
     public void shouldUploadIdentityDocument_whenMediaTypeIsSupported(MediaType supportedMediaType) {
-        File file = createTempFile(supportedMediaType);
+        File file = TestTempFileCreator.createFile(supportedMediaType);
 
         var storageKey = given()
             .spec(requestSpecification)
@@ -86,7 +74,7 @@ class UploadAccountHolderIdentityDocumentControllerIT implements LocalStackTestC
     @ParameterizedTest
     @ArgumentsSource(UnsupportedMediaTypesArgumentProvider.class)
     public void shouldReturnStatus415UnsupportedMediaType_whenMediaTypeIsUnsupported(MediaType unsupportedMediaType) {
-        File file = createTempFile(unsupportedMediaType);
+        File file = TestTempFileCreator.createFile(unsupportedMediaType);
 
         given()
             .spec(requestSpecification)
@@ -99,7 +87,7 @@ class UploadAccountHolderIdentityDocumentControllerIT implements LocalStackTestC
     }
 
     @Test
-    void shouldReturnStatus400BadRequest_whenFileUploadIdIsNull() {
+    void shouldReturnStatus400BadRequest_whenFileUploadIdIsMissing() {
         given()
             .spec(requestSpecification)
                 .pathParam("account-holder-id", ACCOUNT_HOLDER_ID_JEFFERSON)

@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidatedFileExtensions {
 
-    String message() default "accountHolder.fileUpload.unsupportedFileExtension";
+    String message() default "";
 
     Class<?>[] groups() default {};
 
