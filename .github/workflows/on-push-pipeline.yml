@@ -19,15 +19,25 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v3
 
-      - name: Set up JDK (GraalVM) and Cache Maven Dependencies
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'graalvm'
-          java-version: 17
-          cache: maven
+      - name: Download and Install GraalVM
+        run: |
+          GRAALVM_VERSION=22.3.0
+          GRAALVM_PKG="graalvm-ce-java17-linux-amd64-${GRAALVM_VERSION}.tar.gz"
+          curl -L -o ${GRAALVM_PKG} https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${GRAALVM_VERSION}/${GRAALVM_PKG}
+          tar -xzf ${GRAALVM_PKG} -C /opt/
+          export GRAALVM_HOME="/opt/graalvm-ce-java17-${GRAALVM_VERSION}"
+          echo "GRAALVM_HOME=${GRAALVM_HOME}" >> $GITHUB_ENV
+          echo "${GRAALVM_HOME}/bin" >> $GITHUB_PATH
 
-      - name: Install GraalVM Native Image
-        run: gu install native-image
+      - name: Set up Java and Maven
+        run: |
+          sudo update-alternatives --install /usr/bin/java java ${GRAALVM_HOME}/bin/java 1
+          sudo update-alternatives --install /usr/bin/javac javac ${GRAALVM_HOME}/bin/javac 1
+          sudo update-alternatives --set java ${GRAALVM_HOME}/bin/java
+          sudo update-alternatives --set javac ${GRAALVM_HOME}/bin/javac
+
+      - name: Install Native Image Tool
+        run: ${GRAALVM_HOME}/bin/gu install native-image
 
       - name: Build Native Image
         run: |
