@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+env:
+  LOCALSTACK_VERSION: "3.7.0"
+
 jobs:
   # Phase 1: Basic Build and Unit Tests
   build-and-test:
