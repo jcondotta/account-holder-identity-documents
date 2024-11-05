@@ -2,16 +2,16 @@ package com.jcondotta.web.controller;
 
 import com.jcondotta.service.UploadIdentityDocumentService;
 import com.jcondotta.service.request.UploadIdentityDocumentRequest;
-import io.micronaut.http.*;
+import io.micronaut.http.HttpHeaders;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
 import io.micronaut.http.multipart.CompletedFileUpload;
-import io.micronaut.objectstorage.response.UploadResponse;
 import io.micronaut.validation.Validated;
 import jakarta.inject.Inject;
-import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import java.util.UUID;
 

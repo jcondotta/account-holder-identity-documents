@@ -3,7 +3,6 @@ package com.jcondotta.factory;
 import io.micronaut.context.MessageSource;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.i18n.ResourceBundleMessageSource;
-import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 
 import java.util.Locale;

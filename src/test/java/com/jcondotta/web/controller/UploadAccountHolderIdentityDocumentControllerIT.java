@@ -5,7 +5,6 @@ import com.jcondotta.argument_provider.SupportedMediaTypesArgumentProvider;
 import com.jcondotta.argument_provider.UnsupportedMediaTypesArgumentProvider;
 import com.jcondotta.container.LocalStackTestContainer;
 import com.jcondotta.helper.TestAccountHolder;
-import com.jcondotta.service.request.UploadIdentityDocumentRequest;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.objectstorage.aws.AwsS3Operations;

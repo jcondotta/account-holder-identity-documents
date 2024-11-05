@@ -13,8 +13,6 @@ import jakarta.inject.Singleton;
 import org.apache.commons.io.FilenameUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Singleton
 public class ValidatedFileExtensionsValidator implements ConstraintValidator<ValidatedFileExtensions, CompletedFileUpload> {
