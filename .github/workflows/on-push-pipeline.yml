@@ -41,7 +41,7 @@ jobs:
 
       - name: Build Native Image
         run: |
-          mvn clean package -Pnative -Dpackaging=native-image --batch-mode -Dnative-image.args="--report-unsupported-elements-at-runtime"
+          mvn clean package -Pnative -Dpackaging=native-image --batch-mode
 
       - name: Upload Unit Test Coverage Report
         uses: actions/upload-artifact@v3
