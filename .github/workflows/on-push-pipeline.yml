@@ -19,16 +19,19 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v3
 
-      - name: Set up JDK and Cache Maven Dependencies
+      - name: Set up JDK (GraalVM) and Cache Maven Dependencies
         uses: actions/setup-java@v3
         with:
-          distribution: 'corretto'
+          distribution: 'graalvm'
           java-version: 17
           cache: maven
 
-      - name: Compile and Run Unit Tests with JaCoCo
+      - name: Install GraalVM Native Image
+        run: gu install native-image
+
+      - name: Build Native Image
         run: |
-          mvn clean package --batch-mode
+          mvn clean package -Pnative -Dpackaging=native-image --batch-mode
 
       - name: Upload Unit Test Coverage Report
         uses: actions/upload-artifact@v3
