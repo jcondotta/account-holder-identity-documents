@@ -63,7 +63,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.docker-cache/localstack
-          key: ${{ runner.os }}-localstack-${{ inputs.LOCALSTACK_VERSION }}
+          key: ${{ runner.os }}-localstack-${{ env.LOCALSTACK_VERSION }}
 
       - name: Load or Pull LocalStack Docker image
         run: |
@@ -72,11 +72,11 @@ jobs:
             docker load -i ~/.docker-cache/localstack/localstack.tar
           else
             echo "LocalStack image not found in cache, pulling from Docker Hub..."
-            docker pull localstack/localstack:${{ inputs.LOCALSTACK_VERSION }}
+            docker pull localstack/localstack:${{ env.LOCALSTACK_VERSION }}
             echo "Saving LocalStack image to cache..."
 
             mkdir -p ~/.docker-cache/localstack
-            docker save localstack/localstack:${{ inputs.LOCALSTACK_VERSION }} -o ~/.docker-cache/localstack/localstack.tar
+            docker save localstack/localstack:${{ env.LOCALSTACK_VERSION }} -o ~/.docker-cache/localstack/localstack.tar
           fi
 
       - name: Start LocalStack for Integration Tests
