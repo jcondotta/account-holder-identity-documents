@@ -15,9 +15,8 @@
     </parent>
 
     <properties>
-        <micronaut.version>4.6.0</micronaut.version>
-<!--        <exec.mainClass>com.jcondotta.Application</exec.mainClass>-->
         <exec.mainClass>io.micronaut.function.aws.runtime.MicronautLambdaRuntime</exec.mainClass>
+        <micronaut.version>4.6.0</micronaut.version>
         <packaging>jar</packaging>
         <skipUnitTests>false</skipUnitTests>
 
@@ -138,20 +137,6 @@
             <artifactId>micronaut-test-rest-assured</artifactId>
             <version>${micronaut-test.version}</version>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.groovy</groupId>
-                    <artifactId>groovy</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.groovy</groupId>
-                    <artifactId>groovy-json</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.groovy</groupId>
-                    <artifactId>groovy-xml</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.micronaut.aws</groupId>
@@ -331,33 +316,6 @@
             </plugin>
 
             <plugin>
-                <groupId>org.graalvm.buildtools</groupId>
-                <artifactId>native-maven-plugin</artifactId>
-                <version>0.10.3</version>
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>build-native</id>-->
-<!--                        <goals>-->
-<!--                            <goal>build</goal>-->
-<!--                        </goals>-->
-<!--&lt;!&ndash;                        <configuration>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <classpathScope>compile</classpathScope>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </configuration>&ndash;&gt;-->
-<!--                    </execution>-->
-<!--                    <execution>-->
-<!--                        <id>default-test-compile</id>-->
-<!--                        <phase>test-compile</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>testCompile</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <skip>true</skip> &lt;!&ndash; Skip test compilation &ndash;&gt;-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
@@ -389,7 +347,6 @@
                         <arg>-Amicronaut.processing.group=com.jcondotta</arg>
                         <arg>-Amicronaut.processing.module=account-holder-identity-documents</arg>
                         <arg>-Xlint:all</arg>
-                        <arg>-verbose</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>

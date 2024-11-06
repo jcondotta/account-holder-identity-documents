@@ -16,8 +16,8 @@ public interface LocalStackTestContainer extends TestPropertyProvider {
 
     Logger LOGGER = LoggerFactory.getLogger(LocalStackTestContainer.class);
 
-    String localStackImageName = "localstack/localstack:3.7.0";
-    DockerImageName LOCALSTACK_IMAGE = DockerImageName.parse(localStackImageName);
+    String LOCAL_STACK_IMAGE_NAME = "localstack/localstack:3.7.0";
+    DockerImageName LOCALSTACK_IMAGE = DockerImageName.parse(LOCAL_STACK_IMAGE_NAME);
 
     LocalStackContainer LOCALSTACK_CONTAINER = new LocalStackContainer(LOCALSTACK_IMAGE)
             .withServices(Service.S3);

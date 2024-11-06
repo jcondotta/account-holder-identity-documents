@@ -56,13 +56,13 @@ class UploadAccountHolderIdentityDocumentControllerIT implements LocalStackTestC
 
     @Test
     @Ignore
-    public void shouldNotUploadIdentityDocument_whenFileSizeExceeds20MB(){
+    void shouldNotUploadIdentityDocument_whenFileSizeExceeds20MB(){
 
     }
 
     @ParameterizedTest
     @ArgumentsSource(SupportedMediaTypesArgumentProvider.class)
-    public void shouldUploadIdentityDocument_whenMediaTypeIsSupported(MediaType supportedMediaType) {
+    void shouldUploadIdentityDocument_whenMediaTypeIsSupported(MediaType supportedMediaType) {
         File file = TestTempFileCreator.createFile(supportedMediaType);
 
         var storageKey = given()
@@ -81,7 +81,7 @@ class UploadAccountHolderIdentityDocumentControllerIT implements LocalStackTestC
 
     @ParameterizedTest
     @ArgumentsSource(UnsupportedMediaTypesArgumentProvider.class)
-    public void shouldReturnStatus415UnsupportedMediaType_whenMediaTypeIsUnsupported(MediaType unsupportedMediaType) {
+    void shouldReturnStatus415UnsupportedMediaType_whenMediaTypeIsUnsupported(MediaType unsupportedMediaType) {
         File file = TestTempFileCreator.createFile(unsupportedMediaType);
 
         given()

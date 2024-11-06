@@ -19,8 +19,8 @@ public class ValidatedFileExtensionsValidator implements ConstraintValidator<Val
 
     public static final List<MediaType> supportedMediaTypes = List.of(MediaType.IMAGE_PNG_TYPE, MediaType.IMAGE_JPEG_TYPE);
 
-    public static final List<String> supportedFileExtensions = supportedMediaTypes.stream()
-            .map(mediaType -> mediaType.getExtension())
+    static final List<String> supportedFileExtensions = supportedMediaTypes.stream()
+            .map(MediaType::getExtension)
             .toList();
 
     @Override
