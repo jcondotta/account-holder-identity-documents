@@ -5,13 +5,13 @@ micronaut:
   server:
     port: 8074
     multipart:
+      enabled: true
       max-file-size: 20971520 # 20 * 1024 * 1024 = 20MB
 
   object-storage:
     aws:
       account-holder-identity-document:
-        allowed-extensions: [ "png", "jpeg" ]
-        bucket: 'jcondotta-localstack-account-holder-identity-document'
+        bucket: ${AWS_S3_ACCOUNT_HOLDER_IDENTITY_DOCUMENTS_BUCKET_NAME}
 
 aws:
   access-key-id: ${AWS_ACCESS_KEY_ID}

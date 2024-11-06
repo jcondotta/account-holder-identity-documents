@@ -1,8 +1,10 @@
 package com.jcondotta.factory;
 
 import io.micronaut.context.annotation.Factory;
+import io.micronaut.context.annotation.Replaces;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.annotation.Value;
+import io.micronaut.http.server.HttpServerConfiguration;
 import jakarta.inject.Singleton;
 import software.amazon.awssdk.regions.Region;
 

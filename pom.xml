@@ -16,9 +16,15 @@
 
     <properties>
         <micronaut.version>4.6.0</micronaut.version>
-        <exec.mainClass>com.jcondotta.Application</exec.mainClass>
+<!--        <exec.mainClass>com.jcondotta.Application</exec.mainClass>-->
+        <exec.mainClass>io.micronaut.function.aws.runtime.MicronautLambdaRuntime</exec.mainClass>
         <packaging>jar</packaging>
         <skipUnitTests>false</skipUnitTests>
+
+        <sonar.projectKey>jcondotta_account-holder-identity-documents</sonar.projectKey>
+        <sonar.organization>jcondotta</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 
         <jdk.version>17</jdk.version>
         <release.version>${jdk.version}</release.version>
@@ -72,6 +78,14 @@
             <groupId>io.micronaut.objectstorage</groupId>
             <artifactId>micronaut-object-storage-aws</artifactId>
             <version>${micronaut-object-storage-aws.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.micronaut.aws</groupId>
+            <artifactId>micronaut-function-aws-api-proxy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micronaut.aws</groupId>
+            <artifactId>micronaut-function-aws-custom-runtime</artifactId>
         </dependency>
         <dependency>
             <groupId>org.yaml</groupId>
@@ -138,6 +152,12 @@
                     <artifactId>groovy-xml</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.micronaut.aws</groupId>
+            <artifactId>micronaut-function-aws-test</artifactId>
+            <version>${micronaut-test.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -314,17 +334,27 @@
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
                 <version>0.10.3</version>
-                <executions>
-                    <execution>
-                        <id>build-native</id>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                        <configuration>
-                            <classpathScope>compile</classpathScope> <!-- Excludes test classes -->
-                        </configuration>
-                    </execution>
-                </executions>
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>build-native</id>-->
+<!--                        <goals>-->
+<!--                            <goal>build</goal>-->
+<!--                        </goals>-->
+<!--&lt;!&ndash;                        <configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <classpathScope>compile</classpathScope>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </configuration>&ndash;&gt;-->
+<!--                    </execution>-->
+<!--                    <execution>-->
+<!--                        <id>default-test-compile</id>-->
+<!--                        <phase>test-compile</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>testCompile</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <skip>true</skip> &lt;!&ndash; Skip test compilation &ndash;&gt;-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
             </plugin>
 
             <plugin>

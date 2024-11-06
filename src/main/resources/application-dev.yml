@@ -5,3 +5,9 @@ aws:
   services:
     s3:
       endpoint-override: 'http://127.0.0.1:4566'
+
+micronaut:
+  object-storage:
+    aws:
+      account-holder-identity-document:
+        bucket: 'jcondotta-localstack-account-holder-identity-document'

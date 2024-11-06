@@ -14,6 +14,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import jakarta.inject.Inject;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,13 +33,14 @@ import static org.hamcrest.Matchers.notNullValue;
 @MicronautTest(transactional = false)
 class UploadAccountHolderIdentityDocumentControllerIT implements LocalStackTestContainer {
 
+    private static final UUID ACCOUNT_HOLDER_ID_JEFFERSON = TestAccountHolder.JEFFERSON.getAccountHolderId();
+
     @Inject
     protected AwsS3Operations awsS3Operations;
 
     @Inject
     private RequestSpecification requestSpecification;
 
-    private static final UUID ACCOUNT_HOLDER_ID_JEFFERSON = TestAccountHolder.JEFFERSON.getAccountHolderId();
 
     @BeforeAll
     public static void beforeAll(){
@@ -50,6 +52,12 @@ class UploadAccountHolderIdentityDocumentControllerIT implements LocalStackTestC
         this.requestSpecification = requestSpecification
                 .contentType(ContentType.MULTIPART)
                 .basePath(AccountHolderURIBuilder.IDENTITY_DOCUMENT_API_V1_MAPPING);
+    }
+
+    @Test
+    @Ignore
+    public void shouldNotUploadIdentityDocument_whenFileSizeExceeds20MB(){
+
     }
 
     @ParameterizedTest

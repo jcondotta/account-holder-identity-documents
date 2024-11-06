@@ -2,6 +2,11 @@ micronaut:
   server:
     port: 8174
 
+  object-storage:
+    aws:
+      account-holder-identity-document:
+        bucket: 'jcondotta-test-account-holder-identity-document'
+
 aws:
   access-key-id: 'test'
   secret-key: 'test'
