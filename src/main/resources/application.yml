@@ -6,7 +6,7 @@ micronaut:
     port: 8074
     multipart:
       enabled: true
-      max-file-size: 20971520 # 20 * 1024 * 1024 = 20MB
+      max-file-size: 2097152 # 2 * 1024 * 1024 = 2MB
 
   object-storage:
     aws:

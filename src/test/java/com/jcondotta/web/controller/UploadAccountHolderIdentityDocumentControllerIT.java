@@ -14,7 +14,6 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import jakarta.inject.Inject;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,12 +53,6 @@ class UploadAccountHolderIdentityDocumentControllerIT implements LocalStackTestC
                 .basePath(AccountHolderURIBuilder.IDENTITY_DOCUMENT_API_V1_MAPPING);
     }
 
-    @Test
-    @Ignore
-    void shouldNotUploadIdentityDocument_whenFileSizeExceeds20MB(){
-
-    }
-
     @ParameterizedTest
     @ArgumentsSource(SupportedMediaTypesArgumentProvider.class)
     void shouldUploadIdentityDocument_whenMediaTypeIsSupported(MediaType supportedMediaType) {
@@ -92,6 +85,23 @@ class UploadAccountHolderIdentityDocumentControllerIT implements LocalStackTestC
             .post()
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.getCode());
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(SupportedMediaTypesArgumentProvider.class)
+    void shouldNotUploadIdentityDocument_whenFileSizeExceeds2MB(MediaType mediaType){
+        int fileSizeInBytes = 3 * 1024 * 1024; // 3MB
+        File largeFile = TestTempFileCreator.createFile(mediaType, fileSizeInBytes);
+
+        given()
+        .spec(requestSpecification)
+            .pathParam("account-holder-id", ACCOUNT_HOLDER_ID_JEFFERSON)
+            .multiPart("fileUpload", largeFile)
+        .when()
+            .post()
+        .then()
+            .statusCode(HttpStatus.REQUEST_ENTITY_TOO_LARGE.getCode())
+            .body("message", notNullValue());
     }
 
     @Test

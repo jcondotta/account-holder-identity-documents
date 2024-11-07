@@ -29,9 +29,6 @@
         <release.version>${jdk.version}</release.version>
         <maven.compiler.source>${jdk.version}</maven.compiler.source>
         <maven.compiler.target>${jdk.version}</maven.compiler.target>
-        <!--    <micronaut.aot.enabled>false</micronaut.aot.enabled>-->
-<!--            <micronaut.aot.packageName>com.jcondotta.aot.generated</micronaut.aot.packageName>-->
-        <!--    <micronaut.runtime>netty</micronaut.runtime>-->
 
         <micronaut-object-storage-aws.version>2.6.0</micronaut-object-storage-aws.version>
 

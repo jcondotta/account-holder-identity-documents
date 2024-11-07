@@ -30,7 +30,7 @@ public class UploadAccountHolderIdentityDocumentController {
 
     @Status(HttpStatus.CREATED)
     @Post(consumes = MediaType.MULTIPART_FORM_DATA)
-    public HttpResponse<?> uploadIdentityDocument(@PathVariable("account-holder-id") UUID accountHolderId, @Part CompletedFileUpload fileUpload){
+    public HttpResponse<String> uploadIdentityDocument(@PathVariable("account-holder-id") UUID accountHolderId, @Part CompletedFileUpload fileUpload){
         LOGGER.info("[AccountHolderId={}] Received request to upload identity document.", accountHolderId);
 
         var uploadIdentityDocumentRequest = new UploadIdentityDocumentRequest(accountHolderId, fileUpload);
