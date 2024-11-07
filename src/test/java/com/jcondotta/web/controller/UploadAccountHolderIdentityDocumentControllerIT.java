@@ -26,6 +26,7 @@ import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -101,7 +102,7 @@ class UploadAccountHolderIdentityDocumentControllerIT implements LocalStackTestC
             .post()
         .then()
             .statusCode(HttpStatus.REQUEST_ENTITY_TOO_LARGE.getCode())
-            .body("message", notNullValue());
+            .body("message", equalTo("Request Entity Too Large"));
     }
 
     @Test
