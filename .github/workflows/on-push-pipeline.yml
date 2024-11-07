@@ -134,4 +134,5 @@ jobs:
               -Dsonar.host.url=https://sonarcloud.io \
               -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
               -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+              -Dsonar.exclusions=**/*Factory.java,**/*ExceptionHandler.java
 

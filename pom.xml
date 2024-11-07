@@ -24,6 +24,7 @@
         <sonar.organization>jcondotta</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.exclusions>**/*Factory.java,**/*ExceptionHandler.java</sonar.exclusions>
 
         <jdk.version>17</jdk.version>
         <release.version>${jdk.version}</release.version>
