@@ -17,7 +17,7 @@ This project is part of a microservice architecture responsible for managing acc
 - **Amazon S3:** Storage for uploaded identity documents.
 - **AWS Lambda:** Serverless compute platform for running the microservice.
 - **AWS API Gateway:** Gateway for exposing and managing the API endpoints.
-- **Terraform:** Infrastructure as Code (IaC) tool used for managing AWS resources like DynamoDB, Lambda, and API Gateway.
+- **Terraform:** Infrastructure as Code (IaC) tool used for managing AWS resources like S3, Lambda, and API Gateway.
 - **LocalStack:** A fully functional local AWS cloud stack used for local testing of AWS services like S3 and Lambda.
 
 ### CI/CD & Containerization:
@@ -29,7 +29,7 @@ This project is part of a microservice architecture responsible for managing acc
 - **JUnit 5:** Framework for unit and integration testing.
 - **Mockito:** Framework for mocking dependencies in tests.
 - **AssertJ:** Library for fluent assertion statements.
-- **TestContainers:** Library used to spin up containers for integration testing with services like DynamoDB, SQS, and LocalStack.
+- **TestContainers:** Library used to spin up containers for integration testing with services like S3, SQS, and LocalStack.
 
 ### Documentation:
 
