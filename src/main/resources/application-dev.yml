@@ -11,3 +11,13 @@ micronaut:
     aws:
       account-holder-identity-document:
         bucket: 'jcondotta-localstack-account-holder-identity-document'
+  openapi:
+    filename: recipients-swagger-spec
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /swagger-ui/**
