@@ -58,8 +58,8 @@ public class RestConstraintExceptionHandler extends ConstraintExceptionHandler {
         var responseBody = Map.of(
                 "_embedded", Map.of("errors", errorMessages.stream()
                         .map(msg -> Map.of("message", msg))
-                        .toList()), // Convert messages to the desired format
-                "message", "Bad Request" // Include the standard message
+                        .toList()),
+                "message", "Bad Request"
         );
 
         return errorResponseProcessor.processResponse(
