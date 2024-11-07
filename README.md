@@ -1,4 +1,4 @@
-# Recipients Project v.1.0
+# Account Holder Identity Documents Project v.1.0
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jcondotta_account-holder-identity-documents&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=jcondotta_account-holder-identity-documents)    
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jcondotta_account-holder-identity-documents&metric=coverage)](https://sonarcloud.io/summary/new_code?id=jcondotta_account-holder-identity-documents)
