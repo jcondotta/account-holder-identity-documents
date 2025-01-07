@@ -13,4 +13,4 @@ out/
 .settings
 .classpath
 .factorypath
-/terraform/*.out
+terraform/*.out
