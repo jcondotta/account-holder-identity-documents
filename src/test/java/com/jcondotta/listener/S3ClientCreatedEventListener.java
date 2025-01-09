@@ -14,7 +14,7 @@ public class S3ClientCreatedEventListener implements BeanCreatedEventListener<S3
 
     private static final Logger LOGGER = LoggerFactory.getLogger(S3ClientCreatedEventListener.class);
 
-    @Value("${micronaut.object-storage.aws.account-holder-identity-document.bucket}")
+    @Value("${micronaut.object-storage.aws.account-holder-identity-documents.bucket}")
     private String accountHolderIdentityDocumentBucketName;
 
     @Override

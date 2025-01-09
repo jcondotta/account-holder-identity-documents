@@ -4,8 +4,8 @@ micronaut:
 
   object-storage:
     aws:
-      account-holder-identity-document:
-        bucket: 'jcondotta-test-account-holder-identity-document'
+      account-holder-identity-documents:
+        bucket: 'jcondotta-account-holder-identity-documents-test'
 
 aws:
   access-key-id: 'test'
@@ -13,4 +13,4 @@ aws:
   region: 'us-east-1'
   services:
     s3:
-      endpoint-override: 'http://127.0.0.1:4566'
+      endpoint-override: ${AWS_S3_ENDPOINT}

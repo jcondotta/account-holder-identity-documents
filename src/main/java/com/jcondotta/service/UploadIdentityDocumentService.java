@@ -23,7 +23,7 @@ public class UploadIdentityDocumentService {
     private final Validator validator;
 
     @Inject
-    public UploadIdentityDocumentService(@Named("account-holder-identity-document") AwsS3Operations awsS3Operations, Validator validator) {
+    public UploadIdentityDocumentService(@Named("account-holder-identity-documents") AwsS3Operations awsS3Operations, Validator validator) {
         this.awsS3Operations = awsS3Operations;
         this.validator = validator;
     }

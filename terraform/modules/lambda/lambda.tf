@@ -3,18 +3,14 @@ resource "aws_lambda_function" "account_holder_identity_documents_lambda" {
   runtime       = var.runtime
   handler       = var.handler
   role          = aws_iam_role.account_holder_identity_documents_lambda_role_exec.arn
-  filename      = var.filename
+  s3_bucket     = "jcondotta-lambda-files"
+  s3_key        = "account-holder-identity-documents-0.1.jar"
   memory_size   = var.memory_size
   timeout       = var.timeout
   architectures = ["arm64"]
 
   environment {
-    variables = merge(
-      {
-        AWS_S3_ACCOUNT_HOLDER_IDENTITY_DOCUMENTS_BUCKET_NAME = var.account_holder_identity_documents_bucket_name
-      },
-      var.environment_variables
-    )
+    variables = var.environment_variables
   }
 
   tags = var.tags

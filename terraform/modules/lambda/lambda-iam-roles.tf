@@ -4,13 +4,15 @@ resource "aws_iam_role" "account_holder_identity_documents_lambda_role_exec" {
   assume_role_policy = jsonencode(
     {
       "Version" : "2012-10-17",
-      "Statement" : [{
-        "Action" : "sts:AssumeRole",
-        "Principal" : {
-          "Service" : "lambda.amazonaws.com"
-        },
-        "Effect" : "Allow"
-      }]
+      "Statement" : [
+        {
+          "Action" : "sts:AssumeRole",
+          "Principal" : {
+            "Service" : "lambda.amazonaws.com"
+          },
+          "Effect" : "Allow"
+        }
+      ]
     }
   )
   tags = var.tags

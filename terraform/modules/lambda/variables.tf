@@ -53,16 +53,6 @@ variable "handler" {
   type        = string
 }
 
-variable "filename" {
-  description = "The path to the file(jar, zip) for the Lambda function"
-  type        = string
-}
-
-variable "account_holder_identity_documents_bucket_name" {
-  description = "The name of the S3 bucket for account holder identity documents"
-  type        = string
-}
-
 variable "account_holder_identity_documents_bucket_arn" {
   description = "The ARN of the S3 bucket for account holder identity documents"
   type        = string

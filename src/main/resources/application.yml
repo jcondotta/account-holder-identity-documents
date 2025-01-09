@@ -10,7 +10,7 @@ micronaut:
 
   object-storage:
     aws:
-      account-holder-identity-document:
+      account-holder-identity-documents:
         bucket: ${AWS_S3_ACCOUNT_HOLDER_IDENTITY_DOCUMENTS_BUCKET_NAME}
 
 aws:

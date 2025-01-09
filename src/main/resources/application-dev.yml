@@ -9,8 +9,8 @@ aws:
 micronaut:
   object-storage:
     aws:
-      account-holder-identity-document:
-        bucket: 'jcondotta-localstack-account-holder-identity-document'
+      account-holder-identity-documents:
+        bucket: 'jcondotta-account-holder-identity-documents-localstack'
   openapi:
     filename: recipients-swagger-spec
   router:
