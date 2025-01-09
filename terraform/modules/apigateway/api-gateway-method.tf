@@ -2,7 +2,7 @@ resource "aws_api_gateway_method" "teste" {
   rest_api_id   = aws_api_gateway_rest_api.this.id
   resource_id   = aws_api_gateway_rest_api.this.root_resource_id
   http_method   = "GET"
-  authorization = "NONE"  # No authentication required for login
+  authorization = "NONE" # No authentication required for login
 }
 
 resource "aws_api_gateway_integration" "post_login_integration" {

@@ -1,6 +1,6 @@
 # Define the IAM Role for the Lambda function
 resource "aws_iam_role" "account_holder_identity_documents_lambda_role_exec" {
-  name = "${var.lambda_function_name}-exec-role"
+  name = "${var.function_name}-exec-role"
   assume_role_policy = jsonencode(
     {
       "Version" : "2012-10-17",
@@ -17,7 +17,7 @@ resource "aws_iam_role" "account_holder_identity_documents_lambda_role_exec" {
 }
 
 resource "aws_iam_role_policy" "lambda_policy" {
-  name = "${var.lambda_function_name}-policy"
+  name = "${var.function_name}-policy"
   role = aws_iam_role.account_holder_identity_documents_lambda_role_exec.id
   policy = jsonencode(
     {
@@ -34,11 +34,11 @@ resource "aws_iam_role_policy" "lambda_policy" {
             "logs:PutLogEvents"
           ],
           "Effect" : "Allow",
-          "Resource" : "arn:aws:logs:${var.aws_region}:${var.current_aws_account_id}:log-group:/aws/lambda/${var.lambda_function_name}:*"
+          "Resource" : "arn:aws:logs:${var.aws_region}:${var.current_aws_account_id}:log-group:/aws/lambda/${var.function_name}:*"
         },
         {
           "Effect" : "Allow",
-          "Action": [
+          "Action" : [
             "s3:GetObject",
             "s3:PutObject",
             "s3:DeleteObject",

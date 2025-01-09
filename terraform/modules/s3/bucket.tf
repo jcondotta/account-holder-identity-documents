@@ -1,5 +1,11 @@
 resource "aws_s3_bucket" "this" {
-  bucket = var.account_holder_identity_document_bucket_name
+  bucket = var.bucket_name
+}
 
-  tags = var.tags
+resource "aws_s3_bucket_versioning" "this" {
+  bucket = aws_s3_bucket.this.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
 }
