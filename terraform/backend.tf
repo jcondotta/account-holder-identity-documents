@@ -3,7 +3,7 @@ terraform {
     organization = "jcondotta"
 
     workspaces {
-      name = "account-holder-identity-documents"
+      name = "prod"
     }
   }
 }
